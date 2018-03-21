@@ -8,20 +8,20 @@ export default class AppState {
   @observable testval;
 
   constructor() {
+    this.apiKey = 'cf882ff05c8e4f8aad4bce8b95e03efyours';
     this.items = [];
     this.item = {};
 
     this.testval = "Cipick-/ ";
   }
 
-  async fetchData(pathname, id) {
+  async fetchData(pathname) {
     let { data } = await axios.get(pathname);
-    console.log(data);
-    data.length > 0 ? this.setData(data) : this.setSingle(data);
+    this.setData(data);
   }
 
   @action setData(data) {
-    this.items = data;
+    this.items = data['articles'];
   }
 
   @action setSingle(data) {

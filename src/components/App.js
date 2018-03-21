@@ -12,13 +12,6 @@ export default class App extends Component {
 		super(props);
 		this.store = this.props.store;
 	}
-	componentDidMount() {
-		this.authenticate();
-	}
-	authenticate(e) {
-		if (e) e.preventDefault();
-		this.store.appState.authenticate();
-	}
 	render() {
 		const {
 			authenticated,
@@ -30,7 +23,14 @@ export default class App extends Component {
 		return (
 			<div className="wrapper">
 				{/*<DevTools />*/}
-			
+				
+				<Route
+					exact
+					path="/"
+					render={props => (
+						<LazyRoute {...props} component={import("./Home")} />
+					)}
+				/>
 			</div>
 		);
 	}
