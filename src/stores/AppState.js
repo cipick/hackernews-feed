@@ -3,33 +3,53 @@ import axios from "axios";
 
 export default class AppState {
   @observable items;
-  @observable item;
+  @observable maxItem;
 
   @observable testval;
 
   constructor() {
-    this.apiKey = 'cf882ff05c8e4f8aad4bce8b95e03efyours';
     this.items = [];
-    this.item = {};
+    this.maxItem = 0;
 
     this.testval = "Cipick-/ ";
+    this.baseURL = 'https://hacker-news.firebaseio.com/v0';
   }
 
-  async fetchData(pathname) {
-    let { data } = await axios.get(pathname);
-    this.setData(data);
+  async fetchMaxItem() {
+    let { data } = await axios.get(
+      `${this.baseURL}/maxitem.json`
+    );
+    this.setMaxItem(data);
   }
 
-  @action setData(data) {
-    this.items = data['articles'];
+  async fetchData() {
+    let { data } = await axios.get(
+      `${this.baseURL}/newstories.json`
+    );
+
+    data.map((postId, index) => {
+      if(index < 100) {
+        this.fetchItem(postId);
+      }
+    });
   }
 
-  @action setSingle(data) {
-    this.item = data;
+  async fetchItem(key) {
+    let { data } = await axios.get(
+      `${this.baseURL}/item/${key}.json`
+    );
+    this.setSingle(data);
+  }
+
+  @action setMaxItem(data) {
+    this.maxItem = data;
+  }
+
+  @action setSingle(item) {
+    this.items.push(item);
   }
 
   @action clearItems() {
     this.items = [];
-    this.item = {};
   }
 }

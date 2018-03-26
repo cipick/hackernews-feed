@@ -13,16 +13,13 @@ export default class Home extends Component {
 
 	render() {
 		const store = this.store;
-		const apiKey = this.store.apiKey;
 		return (
 			<div className="page home">
 				<header>
 					<h1>Hacker-news feed</h1>
 				</header>
 				<main>
-					<PostsList
-						url=`https://newsapi.org/v2/everything?sources=hacker-news&apiKey=${apiKey}`
-					/>
+					<PostsList />
 				</main>
 			</div>
 		);
