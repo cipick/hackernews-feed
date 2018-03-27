@@ -60,6 +60,7 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-router-dom": "latest",
+    "react-virtualized": "^9.18.5",
     "rfx-core": "^1.5.3",
     "whatwg-fetch": "^2.0.3"
   },
