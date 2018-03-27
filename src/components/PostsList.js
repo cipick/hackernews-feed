@@ -79,11 +79,10 @@ export default class PostsList extends Component {
 		       className="title">
 		       {title}
 		    </a>
-		    <p>via <a href={userUrl}>{userName}</a></p>
+		    <p>by <a href={userUrl}>{userName}</a> - {time}</p>
 		    <a href="#!" className="secondary-content">
 					{row.score}
 					<i className="material-icons">arrow_drop_up</i></a>
-				- {time}
 		  </div>
 		);
   }
