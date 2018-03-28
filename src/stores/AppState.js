@@ -1,18 +1,21 @@
 import { observable, action } from "mobx";
+import { create, persist } from 'mobx-persist'
 import axios from "axios";
 
+const hydrate = create({})
+
 export default class AppState {
-  @observable items;
-  @observable maxItem;
+  @persist('list') @observable items = [];
+  @persist @observable maxItem = 0;
 
   @observable testval;
 
   constructor() {
-    this.items = [];
-    this.maxItem = 0;
-
     this.testval = "Cipick-/ ";
     this.baseURL = 'https://hacker-news.firebaseio.com/v0';
+
+    hydrate('App', this)
+      .then(() => console.log('App hydrated'))
   }
 
   async fetchMaxItem() {
