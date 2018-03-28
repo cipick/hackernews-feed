@@ -1,25 +1,12 @@
 # React MobX React-Router 4 Boilerplate
 
-### :tada: React, React-Router@next, MobX and Webpack 2.
-## [Demo](http://boilerplate.mhaagens.me)
+### :tada: React, React-Router@next, React-Virtualized, MobX, MobX-Persist, and Webpack 2.
 
 Just run `npm install` and `npm start`, then go to localhost:3000 to start developing.
 To build, run `npm run build`, and to preview run `npm run preview`, then go
 to localhost:1234 for the minified production bundle.
 
-#### Async component loading
-Components are now loaded async with react-router-loader and the store is injected via MobX Provider. 
-If you've downloaded this boilerplate before remember to run `npm install` again.
-
-#### Read this if you've been using an earlier version of this boilerplate
-
-* 05/03/17 - Hot reloadable MobX stores
-* 04/04/17 - Upgraded to React Router 4 @ latest
-* 01/31/17 - Upgraded to React Router 4 Beta
-* 01/28/17 - Routes are now loaded through [Lazy-Route](https://github.com/mhaagens/lazy-route).
-
-### Todo
-
-- [X] Async loading of components
-- [X] Data fetching example
-- [X] Protected Routes
+https://github.com/mhaagens/react-mobx-react-router4-boilerplate
+https://github.com/bvaughn/react-virtualized
+https://github.com/foxhound87/rfx-core/blob/master/DOCUMENTATION.md
+https://github.com/pinqy520/mobx-persist

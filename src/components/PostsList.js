@@ -5,6 +5,9 @@ import { Match, Link } from "react-router-dom";
 import { AutoSizer, InfiniteLoader, List } from 'react-virtualized';
 import DataWrapper from "./DataWrapper";
 
+const STATUS_LOADING = 1;
+const STATUS_LOADED = 2;
+
 @DataWrapper
 @observer
 export default class PostsList extends Component {
@@ -33,27 +36,40 @@ export default class PostsList extends Component {
 	}
 
 	render() {
-		const { items } = this.store.appState;
-		if(!items.length) {
-			return (<div>loading..</div>)
+		const { newStories, stories } = this.store.appState;
+		const {loadedRowCount, loadingRowCount} = this.state;
+		const storiesCount = stories.size;
+
+		if(!storiesCount) {
+			return (
+				<div className="progress">
+      		<div className="indeterminate"></div>
+  			</div>
+			)
 		}
 
 		return (
 			<div>
+			<button onClick={this._clearData}>
+        Flush Cached Data
+      </button>
+			Loaded: {loadedRowCount}, Loading: {loadingRowCount}
 			<InfiniteLoader
 				isRowLoaded={this._isRowLoaded}
 				loadMoreRows={this._loadMoreRows}
-				rowCount={items.length}>
+				rowCount={storiesCount}>
 				{({onRowsRendered, registerChild}) => (
 					<AutoSizer disableHeight>
 						{({width}) => (
 							<List
+								ref={registerChild}
 								className='collection'
 			          height={400}
 								width={width}
-								rowHeight={100}
-			          rowCount={items.length}
+								rowHeight={84}
+			          rowCount={storiesCount}
 								rowRenderer={this._rowRenderer}
+								onRowsRendered={onRowsRendered}
 			        />
 						)}
 					</AutoSizer>
@@ -64,24 +80,24 @@ export default class PostsList extends Component {
 	}
 
 	_rowRenderer({index, key, style}) {
-    const list = this.store.appState['items'];
-    const row = list.get(index);
-		const title = row['title'];
-		const userUrl = `https://news.ycombinator.com/user?id=${row.by}`;
-		const userName = row.by;
-		const time = moment().startOf(row.time).fromNow();
+		const { newStories, stories } = this.store.appState;
+		const { loadedRowsMap } = this.state;
+		const storyId = newStories.get(index);
+		const story = stories.get(storyId);
+		const userUrl = `https://news.ycombinator.com/user?id=${story.by}`;
+		const time = moment().startOf(story.time).fromNow();
 
 		return (
-		  <div key={key} style={{height: '100px'}} className='collection-item avatar'>
+			<div className="collection-item avatar" key={key} style={style}>
 		    <i className="material-icons circle red">play_arrow</i>
 		    <a target="_blank"
-					 href={row.url}
+					 href={story.url}
 		       className="title">
-		       {title}
+		       {story.title}
 		    </a>
-		    <p>by <a href={userUrl}>{userName}</a> - {time}</p>
+		    <p>by <a href={userUrl}>{story.by}</a> - {time}</p>
 		    <a href="#!" className="secondary-content">
-					{row.score}
+					{story.score}
 					<i className="material-icons">arrow_drop_up</i></a>
 		  </div>
 		);
@@ -96,13 +112,11 @@ export default class PostsList extends Component {
 	}
 
 	_isRowLoaded({index}) {
-		console.log('is loaded');
 		const {loadedRowsMap} = this.state;
 		return !!loadedRowsMap[index]; // STATUS_LOADING or STATUS_LOADED
 	}
 
 	_loadMoreRows({startIndex, stopIndex}) {
-		console.log('load more');
 		const {loadedRowsMap, loadingRowCount} = this.state;
 		const increment = stopIndex - startIndex + 1;
 

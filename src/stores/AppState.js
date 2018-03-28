@@ -1,14 +1,25 @@
 import { observable, action } from "mobx";
-import { create, persist } from 'mobx-persist'
+import { create, persist } from 'mobx-persist';
 import axios from "axios";
 
 const hydrate = create({})
 
-export default class AppState {
-  @persist('list') @observable items = [];
-  @persist @observable maxItem = 0;
+class Story {
+  id: number
+  index: number
+  title: string
+  type: string
+  by: string
+  url: string
+  descendants: number
+  score: number
+  time: number
+}
 
-  @observable testval;
+export default class AppState {
+  @persist('number')      @observable maxItem     = 0;
+  @persist('array')       @observable newStories  = [];
+  @persist('list', Story) @observable stories     = new Map();
 
   constructor() {
     this.testval = "Cipick-/ ";
@@ -26,33 +37,32 @@ export default class AppState {
   }
 
   async fetchData() {
+    this.fetchNewStories();
+  }
+
+  async fetchNewStories() {
     let { data } = await axios.get(
       `${this.baseURL}/newstories.json`
     );
 
-    data.map((postId, index) => {
-      if(index < 100) {
-        this.fetchItem(postId);
-      }
+    this.newStories = data;
+    this.newStories.map((key, index) => {
+      if(index<50) this.fetchStory(key);
     });
   }
 
-  async fetchItem(key) {
+  async fetchStory(key) {
     let { data } = await axios.get(
       `${this.baseURL}/item/${key}.json`
     );
     this.setSingle(data);
   }
 
-  @action setMaxItem(data) {
-    this.maxItem = data;
-  }
-
   @action setSingle(item) {
-    this.items.push(item);
+    this.stories.set(item.id, item);
   }
 
   @action clearItems() {
-    this.items = [];
+    this.stories = [];
   }
 }
