@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 
 import PostsList from "./PostsList";
+import Navbar from "./Navbar";
 
 @inject("store")
 @observer
@@ -16,7 +17,7 @@ export default class Home extends Component {
 		return (
 			<div className="page home">
 				<header>
-					<h1>Hacker-news feed</h1>
+					<Navbar />
 				</header>
 				<main>
 					<PostsList />
