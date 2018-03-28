@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 
-import PostsList from "./PostsList";
 import Navbar from "./Navbar";
+import StoryList from "./StoryList";
 
 @inject("store")
 @observer
@@ -20,7 +20,7 @@ export default class Home extends Component {
 					<Navbar />
 				</header>
 				<main>
-					<PostsList />
+					<StoryList />
 				</main>
 			</div>
 		);
