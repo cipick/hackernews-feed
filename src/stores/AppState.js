@@ -1,20 +1,9 @@
 import { observable, action } from "mobx";
 import { create, persist } from 'mobx-persist';
 import axios from "axios";
+import Story from "./Story";
 
 const hydrate = create({})
-
-class Story {
-  id: number
-  index: number
-  title: string
-  type: string
-  by: string
-  url: string
-  descendants: number
-  score: number
-  time: number
-}
 
 export default class AppState {
   @persist('number')      @observable maxItem     = 0;
